@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class Utils {
 
     public static final String LOG_TAG = Utils.class.getSimpleName();
+    private static final int SUCCESS_CODE = 200;
 
     public static ArrayList<News> getDataFromAPI(String url) {
 
@@ -41,12 +42,11 @@ public class Utils {
                 }
 
                 String author = "Unknown author";
-                JSONArray tagsArray = currentNews.getJSONArray("tags");
-                JSONObject tags = tagsArray.getJSONObject(0);
-                if (tags.has("firstName") && tags.has("lastName")) {
-                    author = "by " + tags.getString("firstName");
-                    author += " " + tags.getString("lastName");
+                JSONObject fileds = currentNews.getJSONObject("fields");
+                if (fileds.has("byline")) {
+                    author = fileds.getString("byline");
                 }
+
                 News eq = new News(webTitle, publicationDate, itemUrl, section, author);
                 news.add(eq);
              }
@@ -86,16 +86,27 @@ public class Utils {
             urlConnection.connect();
             Log.v("Utils", "Kapcsolati kód: " + urlConnection.getResponseCode());
 
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == SUCCESS_CODE) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
                 Log.v("Utils", "Got the connecton!!! Yeah");
             } else {
-                Log.e("Utils", "There's no internet connection.");
+                Log.e("Utils", "There's no connection. Response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException exception) {
             Log.e(LOG_TAG, "Error in the makeHttpRequest() method");
         } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (inputStream != null){
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
             return jsonResponse;
         }
     }
