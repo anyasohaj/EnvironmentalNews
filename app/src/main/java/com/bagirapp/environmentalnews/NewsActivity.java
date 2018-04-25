@@ -49,7 +49,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         if (networkInfo == null || !networkInfo.isConnected()) {
             progressBar.setVisibility(View.GONE);
             emptyView.setImageDrawable((getResources().getDrawable(R.drawable.no_connection)));
-            Log.e("Newsactivity", "There's no internet connection");
+            Log.e(getString(R.string.MainActivity), getString(R.string.no_internet));
         } else {
 
             LoaderManager loaderManager = getLoaderManager();
@@ -99,22 +99,19 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         boolean books = sharedPrefs.getBoolean(getString(R.string.section_key_books),false);
 
         String link = "";
-        if (environment) {link+="environment,";}
-        if (technology){link+="technology,";}
-        if (economy){link+="economy,";}
-        if (science){link+="science,";}
-        if (books){link+="books,";}
-
+        if (environment) {link+=getString(R.string.section_key_environment) + ",";}
+        if (technology){link+=getString(R.string.section_key_technology) + ",";}
+        if (economy){link+=getString(R.string.section_key_economy)+ ",";}
+        if (science){link+=getString(R.string.section_key_science) + ",";}
+        if (books){link+=getString(R.string.section_key_books);}
 
         Uri baseUri = Uri.parse(URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        uriBuilder.appendQueryParameter("api-key", "3fe2484b-9a0f-4029-a280-c1e7911e5d77");
-        uriBuilder.appendQueryParameter("show-fields", "byline");
-        uriBuilder.appendQueryParameter("q", link);
+        uriBuilder.appendQueryParameter(getString(R.string.api_key), getString(R.string.api_key_value));
+        uriBuilder.appendQueryParameter(getString(R.string.show_fields_key), getString(R.string.byline));
+        uriBuilder.appendQueryParameter(getString(R.string.query), link);
 
-
-        Log.v("URI Builder", uriBuilder.toString());
         return new NewsLoader(NewsActivity.this, uriBuilder.toString());
     }
 

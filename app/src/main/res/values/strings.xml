@@ -15,4 +15,15 @@
     <string name="section_key_science">science</string>
 
     <string name="section_key">sections</string>
+    <string name="api_key">api-key</string>
+    <string name="api_key_value">3fe2484b-9a0f-4029-a280-c1e7911e5d77</string>
+    <string name="show_fields_key">show-fields</string>
+    <string name="byline">byline</string>
+    <string name="query">q</string>
+
+    <string name="MainActivity">NewsActivity</string>
+    <string name="no_internet">There\'s no internet connection</string>
+    <string name="no_date">Publication date is not available</string>
+
+
 </resources>
