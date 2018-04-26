@@ -1,5 +1,7 @@
 package com.bagirapp.environmentalnews;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,52 +23,58 @@ public class Utils {
 
     public static final String LOG_TAG = Utils.class.getSimpleName();
     private static final int SUCCESS_CODE = 200;
+    Context UtilContext;
 
-    public static ArrayList<News> getDataFromAPI(String url) {
+    public Utils(Context context){
+        this.UtilContext = context;
+
+    }
+
+    public ArrayList<News> getDataFromAPI(String url) {
 
         ArrayList news = new ArrayList();
         try {
             JSONObject jsonObject = new JSONObject(makeHttpRequest(url));
-            JSONObject response = jsonObject.getJSONObject("response");
-            JSONArray resultsArray = response.getJSONArray("results");
+            JSONObject response = jsonObject.getJSONObject(UtilContext.getString(R.string.JSON_response));
+            JSONArray resultsArray = response.getJSONArray(UtilContext.getString(R.string.JSON_results));
 
             for (int i = 0; i < resultsArray.length(); i++) {
                 JSONObject currentNews = resultsArray.getJSONObject(i);
-                String webTitle = currentNews.getString("webTitle");
-                String itemUrl = currentNews.getString("webUrl");
-                String section = currentNews.getString("sectionName");
+                String webTitle = currentNews.getString(UtilContext.getString(R.string.JSON_webTitle));
+                String itemUrl = currentNews.getString(UtilContext.getString(R.string.JSON_webUrl));
+                String section = currentNews.getString(UtilContext.getString(R.string.JSON_sectionName));
 
-                String publicationDate = "Publication date is not available";
-                if (currentNews.has("webPublicationDate")) {
-                    publicationDate = currentNews.getString("webPublicationDate");
+                String publicationDate = UtilContext.getString(R.string.no_date);
+                if (currentNews.has(UtilContext.getString(R.string.JSON_pubDate))) {
+                    publicationDate = currentNews.getString(UtilContext.getString(R.string.JSON_pubDate));
                 }
 
-                String author = "Unknown author";
-                JSONObject fileds = currentNews.getJSONObject("fields");
-                if (fileds.has("byline")) {
-                    author = fileds.getString("byline");
+                String author = UtilContext.getString(R.string.no_author);
+                JSONObject fileds = currentNews.getJSONObject(UtilContext.getString(R.string.JSON_fields));
+                if (fileds.has(UtilContext.getString(R.string.JSON_byline))) {
+                    author = fileds.getString(UtilContext.getString(R.string.JSON_byline));
                 }
 
                 News eq = new News(webTitle, publicationDate, itemUrl, section, author);
                 news.add(eq);
              }
          } catch (JSONException e) {
-            Log.e("Utils.class", "There's something wrong in getDataFromAPI method ");
+            Log.e(UtilContext.getString(R.string.Util), UtilContext.getString(R.string.error_getDateFromApi));
         }
         return news;
     }
 
-    private static URL createUrl(String urlString) {
+    private  URL createUrl(String urlString) {
         URL url = null;
         try {
             url = new URL(urlString);
         } catch (MalformedURLException exception) {
-            Log.e(LOG_TAG, "Something wrong with creating URL");
+            Log.e(LOG_TAG, UtilContext.getString(R.string.error_url));
         }
         return url;
     }
 
-    public static String makeHttpRequest(String urlString) {
+    public  String makeHttpRequest(String urlString) {
 
         String jsonResponse = "";
         HttpURLConnection urlConnection = null;
@@ -82,19 +90,18 @@ public class Utils {
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setReadTimeout(1000);
             urlConnection.setConnectTimeout(1500);
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod(UtilContext.getString(R.string.request_method));
             urlConnection.connect();
-            Log.v("Utils", "Kapcsolati kód: " + urlConnection.getResponseCode());
+ //           Log.v(UtilContext.getString(R.string.Util), UtilContext.getString(R.string.connection_code) + urlConnection.getResponseCode());
 
             if (urlConnection.getResponseCode() == SUCCESS_CODE) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
-                Log.v("Utils", "Got the connecton!!! Yeah");
             } else {
-                Log.e("Utils", "There's no connection. Response code: " + urlConnection.getResponseCode());
+                Log.e(UtilContext.getString(R.string.Util), UtilContext.getString(R.string.no_connection) + urlConnection.getResponseCode());
             }
         } catch (IOException exception) {
-            Log.e(LOG_TAG, "Error in the makeHttpRequest() method");
+            Log.e(LOG_TAG, UtilContext.getString(R.string.error_makeHttpRequest));
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -111,7 +118,7 @@ public class Utils {
         }
     }
 
-    private static String readFromStream(InputStream inputStream) {
+    private  String readFromStream(InputStream inputStream) {
         StringBuilder output = new StringBuilder();
         InputStreamReader reader = new InputStreamReader(inputStream, Charset.defaultCharset());
         BufferedReader bufferedReader = new BufferedReader(reader);
@@ -123,7 +130,7 @@ public class Utils {
                 line = bufferedReader.readLine();
             }
         } catch (IOException e) {
-            Log.e("Utils.class", "There's something wrong with readFromStream method");
+            Log.e(UtilContext.getString(R.string.Util), UtilContext.getString(R.string.error_readFromStream));
         }
         return output.toString();
 

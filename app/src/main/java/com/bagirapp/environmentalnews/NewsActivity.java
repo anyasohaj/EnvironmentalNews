@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -27,8 +28,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     NewsAdapter adapter;
     private ImageView emptyView;
     private ProgressBar progressBar;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

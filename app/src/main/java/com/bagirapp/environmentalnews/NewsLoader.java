@@ -24,7 +24,8 @@ public class NewsLoader extends AsyncTaskLoader {
         if (url == null) {
             return null;
         }
-        return Utils.getDataFromAPI(url);
+        Utils u = new Utils(getContext());
+        return u.getDataFromAPI(url);
     }
 
 }

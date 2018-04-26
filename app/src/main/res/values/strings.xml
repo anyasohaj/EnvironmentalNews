@@ -24,6 +24,26 @@
     <string name="MainActivity">NewsActivity</string>
     <string name="no_internet">There\'s no internet connection</string>
     <string name="no_date">Publication date is not available</string>
+    <string name="no_author">Unknown author</string>
+    <string name="no_connection">There\'s no connection. Response code: </string>
 
+    <string name="JSON_response">response</string>
+    <string name="JSON_results">results</string>
+    <string name="JSON_webTitle">webTitle</string>
+    <string name="JSON_webUrl">webUrl</string>
+    <string name="JSON_sectionName">sectionName</string>
+    <string name="JSON_pubDate">webPublicationDate</string>
+    <string name="JSON_fields">fields</string>
+    <string name="JSON_byline">byline</string>
+
+    <string name="Util">Utils.class</string>
+    <string name="error_getDateFromApi">There\'s something wrong in getDataFromAPI method</string>
+    <string name="error_url">Something wrong with creating URL</string>
+    <string name="error_makeHttpRequest">Error in the makeHttpRequest() method</string>
+    <string name="error_readFromStream">There\'s something wrong with readFromStream method</string>
+    <string name="connection_code">Connection code: </string>
+    <string name="request_method">GET</string>
+
+    <string name="url_endpoint">https://content.guardianapis.com/search</string>
 
 </resources>
